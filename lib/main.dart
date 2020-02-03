@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mp_chart/mp/chart/line_chart.dart';
 import 'package:mp_chart/mp/controller/line_chart_controller.dart';
-import 'package:mp_chart/mp/core/animator.dart';
 import 'package:mp_chart/mp/core/data/line_data.dart';
 import 'package:mp_chart/mp/core/data_interfaces/i_line_data_set.dart';
 import 'package:mp_chart/mp/core/data_set/line_data_set.dart';
@@ -44,16 +43,26 @@ class _MyHomePageState extends State<MyHomePage> {
   _initData() {
     var random = Random();
     List<Entry> values = List();
+    List<Entry> values2 = List();
+    double val2 = (random.nextDouble() * 150) + 50;
 
-    for (int i = 0; i < 25; i++) {
+    for (int i = 0; i < 15; i++) {
       double val = (random.nextDouble() * 64) - 30;
       values.add(Entry(x: i.toDouble(), y: val));
+
+      values2.add(Entry(x: i.toDouble(), y: val2));
+      var evol = random.nextBool()
+          ? (random.nextDouble() * 15)
+          : -(random.nextDouble() * 10);
+      val2 = val2 + evol;
     }
 
-    LineDataSet set1;
-    set1 = LineDataSet(values, "DataSet 1");
-    List<ILineDataSet> dataSets = List();
-    dataSets.add(set1);
+    LineDataSet set1 = LineDataSet(values, "DataSet 1");
+    LineDataSet set2 = LineDataSet(values2, "DataSet 2")
+      ..setDrawValues(false)
+      ..setDrawCircles(false)
+      ..setColor1(Colors.blue);
+    List<ILineDataSet> dataSets = List()..add(set1)..add(set2);
     _controller.data = LineData.fromList(dataSets);
   }
 
